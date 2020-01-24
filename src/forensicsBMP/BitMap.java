@@ -27,8 +27,10 @@ public class BitMap {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		this.height = this.image.getHeight();
 		this.width = this.image.getWidth();
+		
 	}
 	
 	public int getHeight() {

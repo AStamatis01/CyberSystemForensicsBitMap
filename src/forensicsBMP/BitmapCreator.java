@@ -1,7 +1,5 @@
 package forensicsBMP;
 
-import java.awt.Color;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,9 +9,10 @@ import javax.imageio.ImageIO;
 public class BitmapCreator {	
 	
 	public static void main (String [] args) {
-		BitMap bmp = new BitMap(200,200);
+		System.out.println("Welcome! BitmapCreator");
+		BitMap bmp = new BitMap(1020,1920);
 		
-		File text = new File("manyURLs.txt");
+		File text = new File("testPaper.pdf"); // FILE TO BE CONVERTED TO BITMAP
 	    byte[] textContent = new byte[(int) text.length()];
 	    FileInputStream fis = null;
 	    try {
@@ -23,28 +22,24 @@ public class BitmapCreator {
 	    }catch(IOException e) {
 	    	e.printStackTrace();
 	    }
-	    System.out.println(textContent.length);
 	    
-	    byte [] pixelData = new byte[(int) bmp.getDimensions()];
+//	    byte [] pixelData = new byte[(int) bmp.getDimensions()];
 	    
 	    int byteCount = 0;
-	    int k = 0;
+//	    int k = 0;
 	    for (int i=0; i<bmp.getHeight(); i++) {
 	    	for (int j=0; j<bmp.getWidth(); j++) {
 	    		if (byteCount>=textContent.length)
 		    		break;
 		    	bmp.setPixel(i, j, textContent[byteCount++]);
-		    	pixelData[k++] = bmp.getPixel(i, j);
+//		    	pixelData[k++] = bmp.getPixel(i, j);
 	    	}
 	    }
 	    
-	    
-	    
-	    for (byte i : pixelData) {
-	    	System.out.print((char) i);
-	    }
-	    
-	    	    
+//	    for (byte i : pixelData) {
+//	    	System.out.print((char) i);
+//	    }
+	       
 	    File outputfile = new File("saved.bmp");
 	    try {
 			ImageIO.write(bmp.getImage(), "bmp", outputfile);
@@ -52,6 +47,6 @@ public class BitmapCreator {
 			e.printStackTrace();
 		}
 	    
-		
+	    System.out.println("Bitmap Created!");
 	}
 }
