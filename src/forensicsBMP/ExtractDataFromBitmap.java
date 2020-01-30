@@ -26,7 +26,7 @@ public class ExtractDataFromBitmap {
 		
 		System.out.println("Created Original File!");
 //		for (int i : pixelData) {
-//	    	if (i == 0) break;
+//	    	if (i == 0) break; gtrfgryhg
 //	    	System.out.print((char) i);
 //	    }
 		
