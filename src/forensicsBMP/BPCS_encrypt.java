@@ -1,53 +1,172 @@
 package forensicsBMP;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
 public class BPCS_encrypt {
 	
+	public static List<byte[][]> separateBitplanes(BitMap vessel) {
+		List<byte[][]> bitplanes = new ArrayList<byte[][]>();
+		
+		for (int plane=0;plane<8;plane++) {
+			byte[][] tempBitplane = new byte[vessel.getWidth()][vessel.getHeight()];
+			for (int i=0; i<vessel.getWidth();i++)
+				for(int j=0; j<vessel.getHeight();j++) {
+					tempBitplane[i][j] = (byte) ((vessel.getImage().getRGB(i, j) >> plane) & 0x1);
+			}
+			//System.out.println(bitplanes.size());
+			bitplanes.add(tempBitplane);
+		}
+		
+		return bitplanes;
+	}
+	
+	public static BitMap reconstructBitplanes(BitMap vessel, List<byte[][]>bitplanes) {
+		
+		for (int i=0; i<vessel.getWidth(); i++) {
+			for(int j=0; j<vessel.getHeight(); j++) {
+				int tempPixel=0;
+				for(int plane=7; plane>=0; plane--) {
+					tempPixel = tempPixel | (bitplanes.get(plane)[i][j] << plane);
+				}
+				vessel.setPixelGrayscale(i, j, tempPixel);
+			}
+		}
+		
+		return vessel;
+	}
+	
+	public static byte[][] replaceBlock(byte [][] vesselBitplane,int x, int y, byte[] block) {
+		
+		for (int i=0; i<8;i++) {
+			for(int j=0;j<8;j++) {
+				int newBlockBit = ((block[i] >> (7-j)) & 0x1);
+				vesselBitplane[x*8+i][y*8+j] = (byte) newBlockBit;
+			}
+		}
+		return vesselBitplane;
+	}
+	
+
+	private static void reconstructImage(BitMap vessel, List<byte[][]> vesselBitplanes) {
+		vessel = reconstructBitplanes(vessel, vesselBitplanes);
+		
+		vessel.imageToPBC();
+		
+		try {
+		    // retrieve image
+		    File outputfile = new File("saved3.bmp");
+		    ImageIO.write(vessel.getImage(), "bmp", outputfile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public static void encrypt(BitMap vessel, List<ImageBlock> blocks) {
+		int blocksWidth = vessel.getImage().getWidth()/8;
+		int blocksHeight = vessel.getImage().getHeight()/8;	
+		
+		List<byte[][]> vesselBitplanes = separateBitplanes(vessel);
+		//System.out.println("Hi");
+		for (int bitPlaneNumber=0; bitPlaneNumber<8;bitPlaneNumber++) {
+			System.out.println(bitPlaneNumber + " " + blocks.size());
+			byte[][] currVesselBitplane = vesselBitplanes.get(0);
+			for (int i = 0; i< blocksWidth; i++) 
+				for (int j=0; j<blocksHeight; j++) {
+					
+					if (blocks.isEmpty()) {
+						System.out.println("end");
+						reconstructImage(vessel,vesselBitplanes);
+						return;
+					}
+					
+					byte [] TempcurrVesselBlock = new byte[8];
+					for (int k=0; k<8; k++)
+						for(int q=0;q<8;q++) {
+							TempcurrVesselBlock[k] = (byte) (TempcurrVesselBlock[k] | ((currVesselBitplane[i*8+k][j*8+q] << (7-q))));
+							//System.out.println(currVesselBitplane[i*8+k][j*8+q]);
+						}
+					
+					ImageBlock currVesselBlock = new ImageBlock(TempcurrVesselBlock);
+					//currVesselBlock.printBlock();
+					
+					if (currVesselBlock.calculateComplexity() > 0.3) {
+						
+						currVesselBitplane = replaceBlock(currVesselBitplane, i,j,blocks.get(0).getBlock());
+						blocks.remove(0);
+					}
+					
+					
+				}
+			vesselBitplanes.set(bitPlaneNumber, currVesselBitplane);
+		}
+		//System.out.println("Hi");
+
+	}
+	
+
 
 	public static void main(String [] args) {
 		BitMap bmp = new BitMap("vessel.bmp");
 		
-		for (int i = 0; i< bmp.getImage().getWidth(); i++) {
-			for (int j=0; j<bmp.getImage().getHeight(); j++) {
-				bmp.setPixel(i, j, bmp.pixelToGrayscaleAverage(bmp.getPixel(i, j)));
-			}
-			
-		}
+		bmp.imageToGrayscale();
 		
 		try {
 		    // retrieve image
-		    File outputfile = new File("saved.bmp");
+		    File outputfile = new File("saved1.bmp");
 		    ImageIO.write(bmp.getImage(), "bmp", outputfile);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		for (int i = 0; i< bmp.getImage().getWidth(); i++) {
-			for (int j=0; j<bmp.getImage().getHeight(); j++) {
-				bmp.setPixel(i, j, bmp.pixelToGrayCode(bmp.getPixel(i, j)));
-			}
-			
-		}
+		bmp.imageToGrayCode();
 		
-		try {
-		    // retrieve image
-		    File outputfile = new File("savedGray.bmp");
-		    ImageIO.write(bmp.getImage(), "bmp", outputfile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		
-//		for (int i = 0; i< bmp.getImage().getWidth(); i++) {
-//			for (int j=0; j<bmp.getImage().getHeight(); j++) {
-//				bmp.setPixel(i, j, bmp.pixelToPBC(bmp.getPixel(i, j)));
-//			}
-//			
+		File text = new File("paper1.pdf"); // FILE TO BE CONVERTED TO BITMAP
+	    byte[] textContent = new byte[(int) text.length()];
+	    FileInputStream fis = null;
+	    try {
+	    	fis = new FileInputStream(text);
+	    	fis.read(textContent);
+	    	fis.close();
+	    }catch(IOException e) {
+	    	e.printStackTrace();
+	    }
+
+	    List <ImageBlock> blocks = new ArrayList<ImageBlock>();
+	    int j=0;
+	    byte[] tempByte = new byte[8];
+	    for (int i = 0; i<textContent.length; i++) {
+	    	if (j==0)
+	    		tempByte = new byte[8];
+	    
+	    	tempByte[j] = textContent[i];
+	    	j++;
+	    	if (j==8) {
+	    		blocks.add(new ImageBlock(tempByte));
+	    		j=0;
+	    	}
+	    }
+	    blocks.add(new ImageBlock(tempByte));
+
+	    
+	    encrypt(bmp, blocks);
+	    
+//		try {
+//		    // retrieve image
+//		    File outputfile = new File("savedGray.bmp");
+//		    ImageIO.write(bmp.getImage(), "bmp", outputfile);
+//		} catch (IOException e) {
+//			e.printStackTrace();
 //		}
 //		
+
 //		try {
 //		    // retrieve image
 //		    File outputfile = new File("savedPBC.bmp");
@@ -56,15 +175,18 @@ public class BPCS_encrypt {
 //			e.printStackTrace();
 //		}
 //		
-//		BitMap bmp2 = new BitMap("savedPBC.bmp");
-//		
-//		for (int i = 0; i< bmp.getImage().getWidth(); i++) {
-//			for (int j=0; j<bmp.getImage().getHeight(); j++) {
-//				if (bmp.getPixel(i, j) != bmp2.getPixel(i, j)) {
-//					System.out.println("Different Bit!");
-//				}
-//			}
-//			
-//		}
+	    bmp = new BitMap("saved1.bmp");
+	    BitMap bmp2 = new BitMap("saved2.bmp");
+		int count=0;
+		for (int i = 0; i< bmp.getImage().getWidth(); i++) {
+			for (j=0; j<bmp.getImage().getHeight(); j++) {
+				if (bmp.getPixel(i, j) != bmp2.getPixel(i, j)) {
+					count++;
+					//if (count % 500 == 0)
+						System.out.println(count);
+				}
+			}
+			
+		}
 	}
 }

@@ -33,6 +33,33 @@ public class BitMap {
 		
 	}
 	
+	public void imageToGrayscale() {
+		for (int i = 0; i< this.getImage().getWidth(); i++) {
+			for (int j=0; j<this.getImage().getHeight(); j++) {
+				this.setPixel(i, j, this.pixelToGrayscale(this.getPixel(i, j)));
+			}
+			
+		}
+	}
+	
+	public void imageToGrayCode() {
+		for (int i = 0; i< this.getImage().getWidth(); i++) {
+			for (int j=0; j<this.getImage().getHeight(); j++) {
+				this.setPixel(i, j, this.pixelToGrayCode(this.getPixel(i, j)));
+			}
+			
+		}
+	}
+	
+	public void imageToPBC() {
+		for (int i = 0; i< this.getImage().getWidth(); i++) {
+			for (int j=0; j<this.getImage().getHeight(); j++) {
+				this.setPixel(i, j, this.pixelToPBC(this.getPixel(i, j)));
+			}
+			
+		}
+	}
+	
 	public int toRed(int pixelValue) {
 		int red = 255;
 		int green = 0;
@@ -125,6 +152,10 @@ public class BitMap {
 	
 	public BufferedImage getImage() {
 		return this.image;
+	}
+	
+	public void setPixelGrayscale(int x, int y, int i) {
+		this.image.setRGB(x,y,(i << 16) | (i << 8) | i);
 	}
 	
 	public void setPixel(int x, int y, int i) {
