@@ -2,7 +2,10 @@ package forensicsBMP;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,11 +59,19 @@ public class BPCS_encrypt {
 	private static void reconstructImage(BitMap vessel, List<byte[][]> vesselBitplanes) {
 		vessel = reconstructBitplanes(vessel, vesselBitplanes);
 		
+		try {
+		    // retrieve image
+		    File outputfile = new File("saved4.bmp");
+		    ImageIO.write(vessel.getImage(), "bmp", outputfile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		vessel.imageToPBC();
 		
 		try {
 		    // retrieve image
-		    File outputfile = new File("saved3.bmp");
+		    File outputfile = new File("saved2.bmp");
 		    ImageIO.write(vessel.getImage(), "bmp", outputfile);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -76,7 +87,7 @@ public class BPCS_encrypt {
 		//System.out.println("Hi");
 		for (int bitPlaneNumber=0; bitPlaneNumber<8;bitPlaneNumber++) {
 			System.out.println(bitPlaneNumber + " " + blocks.size());
-			byte[][] currVesselBitplane = vesselBitplanes.get(0);
+			byte[][] currVesselBitplane = vesselBitplanes.get(bitPlaneNumber);
 			for (int i = 0; i< blocksWidth; i++) 
 				for (int j=0; j<blocksHeight; j++) {
 					
@@ -95,9 +106,15 @@ public class BPCS_encrypt {
 					
 					ImageBlock currVesselBlock = new ImageBlock(TempcurrVesselBlock);
 					//currVesselBlock.printBlock();
-					
+					if (currVesselBlock.calculateComplexity() >= 1.0)
+						System.out.println("FOund !");
+					//System.out.println(currVesselBlock.calculateComplexity());
 					if (currVesselBlock.calculateComplexity() > 0.3) {
 						
+						blocks.get(0).conjugateBlock();
+						if (blocks.get(0).calculateComplexity() >=1.0){
+							System.out.println("Found complexity " + blocks.get(0).calculateComplexity() +" " + blocks.size());
+						}
 						currVesselBitplane = replaceBlock(currVesselBitplane, i,j,blocks.get(0).getBlock());
 						blocks.remove(0);
 					}
@@ -113,7 +130,7 @@ public class BPCS_encrypt {
 
 
 	public static void main(String [] args) {
-		BitMap bmp = new BitMap("vessel.bmp");
+		BitMap bmp = new BitMap("vessel5.bmp");
 		
 		bmp.imageToGrayscale();
 		
@@ -128,8 +145,11 @@ public class BPCS_encrypt {
 		bmp.imageToGrayCode();
 		
 		
-		File text = new File("paper1.pdf"); // FILE TO BE CONVERTED TO BITMAP
+		File text = new File("paper2.pdf"); // FILE TO BE CONVERTED TO BITMAP
 	    byte[] textContent = new byte[(int) text.length()];
+	    
+	    
+	    
 	    FileInputStream fis = null;
 	    try {
 	    	fis = new FileInputStream(text);
@@ -138,6 +158,18 @@ public class BPCS_encrypt {
 	    }catch(IOException e) {
 	    	e.printStackTrace();
 	    }
+	    System.out.println(textContent.length);
+	    
+	    PrintWriter writer;
+		try {
+			writer = new PrintWriter("size.txt", "UTF-8");
+			writer.println(textContent.length);
+		    writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    
 
 	    List <ImageBlock> blocks = new ArrayList<ImageBlock>();
 	    int j=0;
@@ -154,6 +186,7 @@ public class BPCS_encrypt {
 	    	}
 	    }
 	    blocks.add(new ImageBlock(tempByte));
+	    blocks.add(new ImageBlock());
 
 	    
 	    encrypt(bmp, blocks);
@@ -182,8 +215,8 @@ public class BPCS_encrypt {
 			for (j=0; j<bmp.getImage().getHeight(); j++) {
 				if (bmp.getPixel(i, j) != bmp2.getPixel(i, j)) {
 					count++;
-					//if (count % 500 == 0)
-						System.out.println(count);
+					//if (count % 1000 == 0)
+					//	System.out.println(count);
 				}
 			}
 			
