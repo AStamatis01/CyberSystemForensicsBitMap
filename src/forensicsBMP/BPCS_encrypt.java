@@ -79,9 +79,34 @@ public class BPCS_encrypt {
 		
 	}
 	
+	private static void createConjugationMap(List<ImageBlock> blocks) {
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter("map.txt", "UTF-8");
+			for(int i=0; i<blocks.size(); i++) {
+				if(blocks.get(i).calculateComplexity()< 0.3) {
+					blocks.get(i).conjugateBlock();
+					writer.println(i);
+				}
+			}
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+		}
+	}
+			
+		
+		 
+		    
+	
+	
 	public static void encrypt(BitMap vessel, List<ImageBlock> blocks) {
 		int blocksWidth = vessel.getImage().getWidth()/8;
 		int blocksHeight = vessel.getImage().getHeight()/8;	
+		int blockCount = 0;
+
+		createConjugationMap(blocks);
 		
 		List<byte[][]> vesselBitplanes = separateBitplanes(vessel);
 		//System.out.println("Hi");
@@ -109,14 +134,20 @@ public class BPCS_encrypt {
 					if (currVesselBlock.calculateComplexity() >= 1.0)
 						System.out.println("FOund !");
 					//System.out.println(currVesselBlock.calculateComplexity());
-					if (currVesselBlock.calculateComplexity() > 0.3) {
+					if (currVesselBlock.calculateComplexity() >= 0.3) {
 						
-						blocks.get(0).conjugateBlock();
-						if (blocks.get(0).calculateComplexity() >=1.0){
-							System.out.println("Found complexity " + blocks.get(0).calculateComplexity() +" " + blocks.size());
-						}
+						
+						//blocks.get(0).conjugateBlock();
+						//if (blocks.get(0).calculateComplexity() >=1.0){
+							//System.out.println("Found complexity " + blocks.get(0).calculateComplexity() +" " + blocks.size());
+						//}
+						if (blocks.get(0).calculateComplexity() <= 0.3)
+							System.out.println("Complexity " + blocks.get(0).calculateComplexity());
 						currVesselBitplane = replaceBlock(currVesselBitplane, i,j,blocks.get(0).getBlock());
 						blocks.remove(0);
+					}
+					else{
+						//System.out.println(blockCount++);
 					}
 					
 					
@@ -130,7 +161,7 @@ public class BPCS_encrypt {
 
 
 	public static void main(String [] args) {
-		BitMap bmp = new BitMap("vessel5.bmp");
+		BitMap bmp = new BitMap("vessel7.bmp");
 		
 		bmp.imageToGrayscale();
 		
@@ -145,7 +176,7 @@ public class BPCS_encrypt {
 		bmp.imageToGrayCode();
 		
 		
-		File text = new File("paper2.pdf"); // FILE TO BE CONVERTED TO BITMAP
+		File text = new File("masters_thesis.pdf"); // FILE TO BE CONVERTED TO BITMAP
 	    byte[] textContent = new byte[(int) text.length()];
 	    
 	    

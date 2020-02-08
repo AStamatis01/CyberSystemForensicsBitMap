@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,12 +20,35 @@ public class BPCS_decrypt {
 		return data;
 	}
 	
+	private static List<Integer> getConjugationMap(){
+		List<Integer> map = new ArrayList<Integer>();
+		
+		Path path = Paths.get("map.txt");
+		Scanner scanner;
+		try {
+			scanner = new Scanner(path);
+			while(scanner.hasNextLine()){
+			    String line = scanner.nextLine();
+			    map.add(Integer.parseInt(line));
+			}
+			scanner.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		System.out.println(map);
+		return map;
+	}
+	
 	public static byte[] decrypt(BitMap vessel, int originalDataCount) {
 		byte [] tempData = new byte[(int) vessel.getDimensions()];
 		int blocksWidth = vessel.getImage().getWidth()/8;
 		int blocksHeight = vessel.getImage().getHeight()/8;	
 		
 		int dataCount = 0;
+		
+		List<Integer> conjugationMap = getConjugationMap();
+		int blockCount = 0;
 		
 		List<byte[][]> vesselBitplanes = BPCS_encrypt.separateBitplanes(vessel);
 		
@@ -50,8 +74,12 @@ public class BPCS_decrypt {
 //						
 //						
 //					}
-					if (currVesselBlock.calculateComplexity() > 0.3) {
-						currVesselBlock.conjugateBlock();
+					if (currVesselBlock.calculateComplexity() >= 0.3) {
+						if (!(conjugationMap.isEmpty()) & conjugationMap.get(0) == blockCount) {
+							currVesselBlock.conjugateBlock();
+							conjugationMap.remove(0);
+						}
+						blockCount++;
 						//currVesselBlock.printBlock();
 					
 							
