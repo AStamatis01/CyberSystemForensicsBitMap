@@ -67,6 +67,17 @@ public class ImageBlock {
 		this.blocks = blocks;
 	}
 	
+	public ImageBlock() {
+//		for (int i=0; i<8;i++) {
+//			if (i%2 == 0)
+//				this.blocks[i] = CHECKERED_BOARD_1;
+//			else
+//				this.blocks[i] = CHECKERED_BOARD_2;
+//		}
+		for (int i=0; i<8; i++)
+			this.blocks[i] = 0;
+	}
+	
 	public void printBlock() {
 		for (int i=0; i<8; i++) {
 			for(int j=7; j>=0;j--)

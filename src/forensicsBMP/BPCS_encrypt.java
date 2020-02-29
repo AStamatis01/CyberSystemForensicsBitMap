@@ -161,7 +161,7 @@ public class BPCS_encrypt {
 
 
 	public static void main(String [] args) {
-		BitMap bmp = new BitMap("vessel7.bmp");
+		BitMap bmp = new BitMap("vessel11.bmp");
 		
 		bmp.imageToGrayscale();
 		
@@ -176,7 +176,7 @@ public class BPCS_encrypt {
 		bmp.imageToGrayCode();
 		
 		
-		File text = new File("masters_thesis.pdf"); // FILE TO BE CONVERTED TO BITMAP
+		File text = new File("test2.zip"); // FILE TO BE CONVERTED TO BITMAP
 	    byte[] textContent = new byte[(int) text.length()];
 	    
 	    

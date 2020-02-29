@@ -36,7 +36,7 @@ public class BPCS_decrypt {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		System.out.println(map);
+		//System.out.println(map);
 		return map;
 	}
 	
