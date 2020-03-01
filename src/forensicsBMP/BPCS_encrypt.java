@@ -79,10 +79,30 @@ public class BPCS_encrypt {
 		
 	}
 	
-	private static void createConjugationMap(List<ImageBlock> blocks) {
+	
+	private static void hideConjugationMap(BitMap mapVessel) {
+		File text = new File("map.txt"); // FILE TO BE CONVERTED TO BITMAP
+		byte[] textContent = new byte[(int) text.length()];
+
+		FileInputStream fis = null;
+
+		try {
+			fis = new FileInputStream(text);
+			fis.read(textContent);
+			fis.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		LSB_encrypt.hide(mapVessel, textContent);
+	}
+	
+	
+	private static void createConjugationMap(List<ImageBlock> blocks, int length) {
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter("map.txt", "UTF-8");
+			writer.println(length);
 			for(int i=0; i<blocks.size(); i++) {
 				if(blocks.get(i).calculateComplexity()< 0.3) {
 					blocks.get(i).conjugateBlock();
@@ -94,19 +114,17 @@ public class BPCS_encrypt {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 		}
+		
+		hideConjugationMap(new BitMap("vessel.bmp"));
 	}
 			
-		
-		 
-		    
 	
-	
-	public static void encrypt(BitMap vessel, List<ImageBlock> blocks) {
+	public static void encrypt(BitMap vessel, List<ImageBlock> blocks, int length) {
 		int blocksWidth = vessel.getImage().getWidth()/8;
 		int blocksHeight = vessel.getImage().getHeight()/8;	
 		int blockCount = 0;
 
-		createConjugationMap(blocks);
+		createConjugationMap(blocks, length);
 		
 		List<byte[][]> vesselBitplanes = separateBitplanes(vessel);
 		//System.out.println("Hi");
@@ -191,16 +209,18 @@ public class BPCS_encrypt {
 	    }
 	    System.out.println(textContent.length);
 	    
-	    PrintWriter writer;
-		try {
-			writer = new PrintWriter("size.txt", "UTF-8");
-			writer.println(textContent.length);
-		    writer.close();
-		} catch (FileNotFoundException | UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	    int length = textContent.length;
 	    
+//	    PrintWriter writer;
+//		try {
+//			writer = new PrintWriter("size.txt", "UTF-8");
+//			writer.println(textContent.length);
+//		    writer.close();
+//		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	    
 
 	    List <ImageBlock> blocks = new ArrayList<ImageBlock>();
 	    int j=0;
@@ -220,37 +240,21 @@ public class BPCS_encrypt {
 	    blocks.add(new ImageBlock());
 
 	    
-	    encrypt(bmp, blocks);
+	    encrypt(bmp, blocks, length);
 	    
-//		try {
-//		    // retrieve image
-//		    File outputfile = new File("savedGray.bmp");
-//		    ImageIO.write(bmp.getImage(), "bmp", outputfile);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		
 
-//		try {
-//		    // retrieve image
-//		    File outputfile = new File("savedPBC.bmp");
-//		    ImageIO.write(bmp.getImage(), "bmp", outputfile);
-//		} catch (IOException e) {
-//			e.printStackTrace();
+//	    bmp = new BitMap("saved1.bmp");
+//	    BitMap bmp2 = new BitMap("saved2.bmp");
+//		int count=0;
+//		for (int i = 0; i< bmp.getImage().getWidth(); i++) {
+//			for (j=0; j<bmp.getImage().getHeight(); j++) {
+//				if (bmp.getPixel(i, j) != bmp2.getPixel(i, j)) {
+//					count++;
+//					if (count % 1000 == 0)
+//						System.out.println(count);
+//				}
+//			}
+//			
 //		}
-//		
-	    bmp = new BitMap("saved1.bmp");
-	    BitMap bmp2 = new BitMap("saved2.bmp");
-		int count=0;
-		for (int i = 0; i< bmp.getImage().getWidth(); i++) {
-			for (j=0; j<bmp.getImage().getHeight(); j++) {
-				if (bmp.getPixel(i, j) != bmp2.getPixel(i, j)) {
-					count++;
-					//if (count % 1000 == 0)
-					//	System.out.println(count);
-				}
-			}
-			
-		}
 	}
 }

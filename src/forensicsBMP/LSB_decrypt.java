@@ -13,7 +13,7 @@ public class LSB_decrypt {
 		return currentByte;
 	}
 	
-	private static byte[] decrypt(BitMap image) {
+	public static byte[] decrypt(BitMap image) {
 		
 		int bitCount = 0;
 		int byteCount = 0;

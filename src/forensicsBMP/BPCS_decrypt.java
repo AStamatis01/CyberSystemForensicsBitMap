@@ -20,27 +20,46 @@ public class BPCS_decrypt {
 		return data;
 	}
 	
+	
 	private static List<Integer> getConjugationMap(){
+		
+		
+		byte[] data = LSB_decrypt.decrypt(new BitMap("savedLSB.bmp"));
+		
+
+		System.out.println(data.length);
+		try (FileOutputStream file = new FileOutputStream("output")) {
+			file.write(data);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
 		List<Integer> map = new ArrayList<Integer>();
 		
-		Path path = Paths.get("map.txt");
+		Path path = Paths.get("output");
 		Scanner scanner;
 		try {
 			scanner = new Scanner(path);
 			while(scanner.hasNextLine()){
 			    String line = scanner.nextLine();
+			    //System.out.println(line);
 			    map.add(Integer.parseInt(line));
 			}
 			scanner.close();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		} catch (NumberFormatException e2) {
+			return map;
 		}
 		//System.out.println(map);
 		return map;
 	}
 	
-	public static byte[] decrypt(BitMap vessel, int originalDataCount) {
+	public static byte[] decrypt(BitMap vessel) {
 		byte [] tempData = new byte[(int) vessel.getDimensions()];
 		int blocksWidth = vessel.getImage().getWidth()/8;
 		int blocksHeight = vessel.getImage().getHeight()/8;	
@@ -48,6 +67,9 @@ public class BPCS_decrypt {
 		int dataCount = 0;
 		
 		List<Integer> conjugationMap = getConjugationMap();
+		int originalDataCount = conjugationMap.get(0);
+		conjugationMap.remove(0);
+		
 		int blockCount = 0;
 		
 		List<byte[][]> vesselBitplanes = BPCS_encrypt.separateBitplanes(vessel);
@@ -65,15 +87,6 @@ public class BPCS_decrypt {
 						}
 					
 					ImageBlock currVesselBlock = new ImageBlock(TempcurrVesselBlock);
-					//currVesselBlock.printBlock();
-					//System.out.println(currVesselBlock.calculateComplexity());
-					//System.out.println(dataCount);
-//					if (currVesselBlock.calculateComplexity() >= 1.0) {
-//						currVesselBlock.printBlock();
-//						System.out.println("FOund !");
-//						
-//						
-//					}
 					if (currVesselBlock.calculateComplexity() >= 0.3) {
 						if (!(conjugationMap.isEmpty()) & conjugationMap.get(0) == blockCount) {
 							currVesselBlock.conjugateBlock();
@@ -119,27 +132,7 @@ public class BPCS_decrypt {
 		BitMap bmp = new BitMap("saved2.bmp"); // IMAGE OF HIDDEN DATA
 		bmp.imageToGrayCode();
 		
-//		try {
-//		    // retrieve image
-//		    File outputfile = new File("saved3.bmp");
-//		    ImageIO.write(bmp.getImage(), "bmp", outputfile);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		BitMap bmp2 = new BitMap("saved3.bmp"); // IMAGE OF HIDDEN DATA
-//		int count=0;
-//		for (int i = 0; i< bmp.getImage().getWidth(); i++) {
-//			for (int j=0; j<bmp.getImage().getHeight(); j++) {
-//				if (bmp.getPixel(i, j) != bmp2.getPixel(i, j)) {
-//					count++;
-//					//if (count % 1000 == 0)
-//						System.out.println(count);
-//				}
-//			}
-//			
-//		}
-		
-		byte[] pixelData = decrypt(bmp, dataCount);
+		byte[] pixelData = decrypt(bmp);
 		
 		System.out.println(pixelData.length);
 		try (FileOutputStream file = new FileOutputStream("output")) {
