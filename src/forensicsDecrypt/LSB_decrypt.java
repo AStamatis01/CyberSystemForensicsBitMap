@@ -1,8 +1,10 @@
-package forensicsBMP;
+package forensicsDecrypt;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import forensicsBMP.BitMap;
 
 public class LSB_decrypt {
 	

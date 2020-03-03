@@ -1,4 +1,4 @@
-package forensicsBMP;
+package forensicsDecrypt;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -10,7 +10,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import forensicsBMP.BitMap;
+import forensicsBMP.ImageBlock;
+
 public class BPCS_decrypt {
+	
+	public static List<byte[][]> separateBitplanes(BitMap vessel) {
+		List<byte[][]> bitplanes = new ArrayList<byte[][]>();
+		
+		for (int plane=0;plane<8;plane++) {
+			byte[][] tempBitplane = new byte[vessel.getWidth()][vessel.getHeight()];
+			for (int i=0; i<vessel.getWidth();i++)
+				for(int j=0; j<vessel.getHeight();j++) {
+					tempBitplane[i][j] = (byte) ((vessel.getImage().getRGB(i, j) >> plane) & 0x1);
+			}
+			//System.out.println(bitplanes.size());
+			bitplanes.add(tempBitplane);
+		}
+		
+		return bitplanes;
+	}
+	
 	
 	private static byte[] createOriginalData(byte[] imageData, int dataCount) {
 		byte[] data = new byte[dataCount];
@@ -72,7 +92,7 @@ public class BPCS_decrypt {
 		
 		int blockCount = 0;
 		
-		List<byte[][]> vesselBitplanes = BPCS_encrypt.separateBitplanes(vessel);
+		List<byte[][]> vesselBitplanes = separateBitplanes(vessel);
 		
 		for (int bitPlaneNumber=0; bitPlaneNumber<8;bitPlaneNumber++) {
 			System.out.println("bitplane " + bitPlaneNumber);
@@ -109,25 +129,7 @@ public class BPCS_decrypt {
 		return tempData;
 	}
 	
-	public static void main (String [] args) {
-		
-		int dataCount = 0;
-		Path path = Paths.get("size.txt");
-		Scanner scanner;
-		try {
-			scanner = new Scanner(path);
-			while(scanner.hasNextLine()){
-			    String line = scanner.nextLine();
-			    dataCount = Integer.parseInt(line);
-			}
-			scanner.close();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		System.out.println(dataCount);
-		
+	public static void main (String [] args) {		
 		
 		BitMap bmp = new BitMap("saved2.bmp"); // IMAGE OF HIDDEN DATA
 		bmp.imageToGrayCode();

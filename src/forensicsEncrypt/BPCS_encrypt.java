@@ -1,4 +1,4 @@
-package forensicsBMP;
+package forensicsEncrypt;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+
+import forensicsBMP.BitMap;
+import forensicsBMP.ImageBlock;
 
 public class BPCS_encrypt {
 	
@@ -179,7 +182,7 @@ public class BPCS_encrypt {
 
 
 	public static void main(String [] args) {
-		BitMap bmp = new BitMap("vessel11.bmp");
+		BitMap bmp = new BitMap("vessel7.bmp");
 		
 		bmp.imageToGrayscale();
 		
@@ -210,17 +213,6 @@ public class BPCS_encrypt {
 	    System.out.println(textContent.length);
 	    
 	    int length = textContent.length;
-	    
-//	    PrintWriter writer;
-//		try {
-//			writer = new PrintWriter("size.txt", "UTF-8");
-//			writer.println(textContent.length);
-//		    writer.close();
-//		} catch (FileNotFoundException | UnsupportedEncodingException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	    
 
 	    List <ImageBlock> blocks = new ArrayList<ImageBlock>();
 	    int j=0;
@@ -242,19 +234,5 @@ public class BPCS_encrypt {
 	    
 	    encrypt(bmp, blocks, length);
 	    
-
-//	    bmp = new BitMap("saved1.bmp");
-//	    BitMap bmp2 = new BitMap("saved2.bmp");
-//		int count=0;
-//		for (int i = 0; i< bmp.getImage().getWidth(); i++) {
-//			for (j=0; j<bmp.getImage().getHeight(); j++) {
-//				if (bmp.getPixel(i, j) != bmp2.getPixel(i, j)) {
-//					count++;
-//					if (count % 1000 == 0)
-//						System.out.println(count);
-//				}
-//			}
-//			
-//		}
 	}
 }
