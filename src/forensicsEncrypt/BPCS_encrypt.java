@@ -74,7 +74,7 @@ public class BPCS_encrypt {
 		
 		try {
 		    // retrieve image
-		    File outputfile = new File("saved2.bmp");
+		    File outputfile = new File("savedBPCS.bmp");
 		    ImageIO.write(vessel.getImage(), "bmp", outputfile);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -138,7 +138,7 @@ public class BPCS_encrypt {
 				for (int j=0; j<blocksHeight; j++) {
 					
 					if (blocks.isEmpty()) {
-						System.out.println("end");
+						System.out.println("BPCS End");
 						reconstructImage(vessel,vesselBitplanes);
 						return;
 					}
@@ -182,7 +182,7 @@ public class BPCS_encrypt {
 
 
 	public static void main(String [] args) {
-		BitMap bmp = new BitMap("vessel7.bmp");
+		BitMap bmp = new BitMap("vessel6.bmp"); //VESSEL IMAGE
 		
 		bmp.imageToGrayscale();
 		

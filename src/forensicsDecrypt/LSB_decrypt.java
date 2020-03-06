@@ -66,7 +66,7 @@ public class LSB_decrypt {
 	}
 
 	public static void main(String[] args) {
-		BitMap bmp = new BitMap("savedLSB.bmp");
+		BitMap bmp = new BitMap("savedLSB.bmp"); // VESSEL
 		
 		byte[] data = decrypt(bmp);
 		

@@ -131,7 +131,7 @@ public class BPCS_decrypt {
 	
 	public static void main (String [] args) {		
 		
-		BitMap bmp = new BitMap("saved2.bmp"); // IMAGE OF HIDDEN DATA
+		BitMap bmp = new BitMap("savedBPCS.bmp"); // IMAGE OF HIDDEN DATA
 		bmp.imageToGrayCode();
 		
 		byte[] pixelData = decrypt(bmp);

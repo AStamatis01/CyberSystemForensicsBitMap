@@ -93,7 +93,7 @@ public class LSB_encrypt {
 								}
 							}
 							createImage(image, subarray);
-							System.out.println("End");
+							System.out.println("LSB End");
 							return;
 						}
 					}
@@ -108,7 +108,7 @@ public class LSB_encrypt {
 
 	public static void main(String[] args) {
 
-		BitMap bmp = new BitMap("vessel6.bmp");
+		BitMap bmp = new BitMap("vessel2.bmp"); // VESSEL FILE
 
 		File text = new File("Welcome.pdf"); // FILE TO BE CONVERTED TO BITMAP
 		byte[] textContent = new byte[(int) text.length()];
