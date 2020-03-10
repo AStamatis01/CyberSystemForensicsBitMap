@@ -108,9 +108,9 @@ public class LSB_encrypt {
 
 	public static void main(String[] args) {
 
-		BitMap bmp = new BitMap("vessel2.bmp"); // VESSEL FILE
+		BitMap bmp = new BitMap("vessel7.bmp"); // VESSEL FILE
 
-		File text = new File("Welcome.pdf"); // FILE TO BE CONVERTED TO BITMAP
+		File text = new File("test.zip"); // FILE TO BE CONVERTED TO BITMAP
 		byte[] textContent = new byte[(int) text.length()];
 
 		FileInputStream fis = null;

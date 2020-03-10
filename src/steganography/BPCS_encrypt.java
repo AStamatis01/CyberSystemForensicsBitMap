@@ -118,7 +118,7 @@ public class BPCS_encrypt {
 			JOptionPane.showMessageDialog(null, e.toString(),"Error", JOptionPane.ERROR_MESSAGE);
 		}
 		
-		hideConjugationMap(new BitMap(image_name));
+		hideConjugationMap(new BitMap("vessel.bmp"));
 	}
 			
 	
@@ -132,7 +132,7 @@ public class BPCS_encrypt {
 		List<byte[][]> vesselBitplanes = separateBitplanes(vessel);
 		//System.out.println("Hi");
 		for (int bitPlaneNumber=0; bitPlaneNumber<8;bitPlaneNumber++) {
-			//System.out.println(bitPlaneNumber + " " + blocks.size());
+			System.out.println(bitPlaneNumber + " " + blocks.size());
 			byte[][] currVesselBitplane = vesselBitplanes.get(bitPlaneNumber);
 			for (int i = 0; i< blocksWidth; i++) 
 				for (int j=0; j<blocksHeight; j++) {
@@ -152,7 +152,7 @@ public class BPCS_encrypt {
 					
 					ImageBlock currVesselBlock = new ImageBlock(TempcurrVesselBlock);
 					//currVesselBlock.printBlock();
-					if (currVesselBlock.calculateComplexity() >= 1.0)
+					//if (currVesselBlock.calculateComplexity() >= 1.0)
 						//System.out.println("FOund !");
 					//System.out.println(currVesselBlock.calculateComplexity());
 					if (currVesselBlock.calculateComplexity() >= 0.3) {
@@ -162,7 +162,7 @@ public class BPCS_encrypt {
 						//if (blocks.get(0).calculateComplexity() >=1.0){
 							//System.out.println("Found complexity " + blocks.get(0).calculateComplexity() +" " + blocks.size());
 						//}
-						if (blocks.get(0).calculateComplexity() <= 0.3)
+						//if (blocks.get(0).calculateComplexity() <= 0.3)
 							//System.out.println("Complexity " + blocks.get(0).calculateComplexity());
 						currVesselBitplane = replaceBlock(currVesselBitplane, i,j,blocks.get(0).getBlock());
 						blocks.remove(0);

@@ -49,7 +49,7 @@ public class BPCS_decrypt {
 		
 
 		System.out.println(data.length);
-		try (FileOutputStream file = new FileOutputStream("Original_File_BPCS")) {
+		try (FileOutputStream file = new FileOutputStream("Original_File_BPCS.txt")) {
 			file.write(data);
 		} catch (FileNotFoundException e) {
 			JOptionPane.showMessageDialog(null, e.toString(),"Error", JOptionPane.ERROR_MESSAGE);
@@ -60,7 +60,7 @@ public class BPCS_decrypt {
 		
 		List<Integer> map = new ArrayList<Integer>();
 		
-		Path path = Paths.get("Original_File_BPCS");
+		Path path = Paths.get("Original_File_BPCS.txt");
 		Scanner scanner;
 		try {
 			scanner = new Scanner(path);
@@ -138,7 +138,7 @@ public class BPCS_decrypt {
 		
 		byte[] pixelData = decrypt(bmp);
 		
-		//System.out.println(pixelData.length);
+		System.out.println("Hi");
 		try (FileOutputStream file = new FileOutputStream("Original_File_BPCS"+"."+form)) {
 			   file.write(pixelData);
 			} catch (FileNotFoundException e) {
