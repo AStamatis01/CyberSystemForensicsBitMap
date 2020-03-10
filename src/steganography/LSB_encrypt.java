@@ -1,3 +1,14 @@
+/** @file LSB_encrypt.java
+* @brief Hiding of data in an image using LSB
+*
+* Hiding of data in an image using LSB
+*
+* @author Wasaif ALsolami, 2415072A
+* @author Ebtihal Althubiti, 2414366A
+* @author Antonios Stamatis, 2479716S
+* 
+*/
+
 package steganography;
 
 import java.io.File;
@@ -16,6 +27,12 @@ import javax.swing.JOptionPane;
 
 public class LSB_encrypt {
 
+	
+	/**
+	 * Reconstruct a new image with the updated LSB (Hidden data)
+	 * @param image the vessel image
+	 * @param pixels the new pixels containing updated LSB data
+	 */
 	private static void createImage(BitMap image, int[][] pixels) {
 
 		for (int i = 0; i < image.getWidth(); i++) {
@@ -24,7 +41,6 @@ public class LSB_encrypt {
 			}
 
 		}
-
 		try {
 			// retrieve image
 			File outputfile = new File("savedLSB.bmp");
@@ -34,6 +50,17 @@ public class LSB_encrypt {
 		}
 	}
 
+	
+	/**
+	 * Update the LSB of the color of the pixel
+	 * @param pixels The current pixels values of the image
+	 * @param file The bytes of the original data
+	 * @param i Pixel position (Row i)
+	 * @param j Pixel position (Row j)
+	 * @param bitCount The bit that will be taken from the file(byte) array
+	 * @param fileCount The byte from the original data that is currently being hidden
+	 * @return the new pixel value
+	 */
 	private static int changeColorPixel(int[][] pixels, byte[] file, int i, int j, int bitCount, int fileCount) {
 		pixels[i][j] = pixels[i][j] >> 1;
 		pixels[i][j] = pixels[i][j] << 1;
@@ -71,17 +98,13 @@ public class LSB_encrypt {
 				for (int color = 0; color<3; color++) {
 					if (color == 0) {
 						redPixels[i][j] = changeColorPixel(redPixels, file, i, j, bitCount, fileCount);
-	
 					} else {
 						if (color == 1) {
 							greenPixels[i][j] = changeColorPixel(greenPixels, file, i, j, bitCount, fileCount);
-	
 						} else {
 							bluePixels[i][j] = changeColorPixel(bluePixels, file, i, j, bitCount, fileCount);
-	
 						}
 					}
-					
 					bitCount++;
 					if (bitCount == 8) {
 						fileCount++;
@@ -89,8 +112,7 @@ public class LSB_encrypt {
 						if (fileCount == size) {
 							for (int q = 0; q < image.getWidth(); q++) {
 								for (int p = 0; p < image.getHeight(); p++) {
-									subarray[q][p] = (redPixels[q][p] << 16) | (greenPixels[q][p] << 8)
-											| (bluePixels[q][p]);
+									subarray[q][p] = (redPixels[q][p] << 16) | (greenPixels[q][p] << 8) | (bluePixels[q][p]);
 								}
 							}
 							createImage(image, subarray);
@@ -102,14 +124,18 @@ public class LSB_encrypt {
 						}
 					}
 				}
-
-				
 			}
 
 		}
 		JOptionPane.showMessageDialog(null,"Data cannot be encrypted! Image size small!");
 	}
 
+	
+	/**
+	 * Start of the LSB encrypt/hiding process. Reads the file data in a byte array.
+	 * @param image_name the image file name
+	 * @param file_name the file to be hidden
+	 */
 	public static void read_image_file(String image_name, String file_name) {
 
 		BitMap bmp = new BitMap(image_name); // VESSEL FILE

@@ -1,3 +1,12 @@
+/** @file Start.java
+* @brief Use this to start the steganography application
+*
+* @author Wasaif ALsolami, 2415072A
+* @author Ebtihal Althubiti, 2414366A
+* @author Antonios Stamatis, 2479716S
+* 
+*/
+
 package steganography;
 import java.awt.GridLayout;
 import java.awt.event.*;
@@ -13,7 +22,7 @@ import javax.swing.JPanel;
 public class Start  extends JFrame implements ActionListener {
 	private	JPanel	panal;
 	private	JButton Hiding_LSB,Hiding_BPCS,Extract_LSB,Extract_BPCS,Exit;
-	public static void main(String[] args) {
+	public static void main(String[] args) {	
 		// TODO Auto-generated method stub
 		new Start();
 

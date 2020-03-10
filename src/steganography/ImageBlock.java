@@ -1,3 +1,14 @@
+/** @file ImageBlock.java
+* @brief Handles image blocks (8x8 bit representations)
+*
+* Handles image blocks, calculates complexity and conjugates them
+* 
+* @author Wasaif ALsolami, 2415072A
+* @author Ebtihal Althubiti, 2414366A
+* @author Antonios Stamatis, 2479716S
+* 
+*/
+
 package steganography;
 
 import java.io.File;
@@ -15,6 +26,20 @@ public class ImageBlock {
 	public final byte CHECKERED_BOARD_2 = (byte) 85;
 
 	
+	public ImageBlock(byte [] blocks) {
+		this.blocks = blocks;
+	}
+	
+	public ImageBlock() {
+		for (int i=0; i<8; i++)
+			this.blocks[i] = 0;
+	}
+	
+	
+	/**
+	 * Calculates the complexity of the block 
+	 * @return The Block's complexity (value 0.0 to 1.0)
+	 */
 	public double calculateComplexity() {
 		int complexity = 0;
 		int currBit = 0;
@@ -50,6 +75,10 @@ public class ImageBlock {
 	}
 	
 	
+	/**
+	 * Conjugates the block
+	 * XOR operation with a checkered style board block
+	 */
 	public void conjugateBlock() {
 		for (int i = 0; i<this.blocks.length; i++)
 			if (i % 2 == 0)
@@ -58,30 +87,14 @@ public class ImageBlock {
 				this.blocks[i] = (byte) (this.blocks[i] ^ this.CHECKERED_BOARD_2);
 	}
 	
+	
+	/**
+	 * Get Blocks
+	 * @return Blocks in a byte array
+	 */
 	public byte[] getBlock() {
 		return this.blocks;
 	}
-	
-	
-	public ImageBlock(byte [] blocks) {
-		this.blocks = blocks;
-	}
-	
-	public ImageBlock() {
-//		for (int i=0; i<8;i++) {
-//			if (i%2 == 0)
-//				this.blocks[i] = CHECKERED_BOARD_1;
-//			else
-//				this.blocks[i] = CHECKERED_BOARD_2;
-//		}
-		for (int i=0; i<8; i++)
-			this.blocks[i] = 0;
-	}
-	
-	public void printBlock() {
-		
-	}
-	
 	
 	
 }
