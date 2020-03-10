@@ -22,29 +22,37 @@ public class Start  extends JFrame implements ActionListener {
 	public Start()
 	{
 		
-		setTitle("Steganography");
-		setSize(400,400);
-		setLocation(200,200);
+		setTitle("****Steganography****");
+		setSize(300,300);
+		setLocation(600,300);
 		
 		panal = new JPanel(new GridLayout(5,3));
 		add(panal, "Center");
 		
-		Hiding_LSB= (JButton) add_button("Hiding the file by using LSB");
-		Hiding_BPCS= (JButton) add_button("Hiding the file by using BPCS");
-		Extract_LSB = (JButton) add_button("Extract the file by using LSB");
-		Extract_BPCS= (JButton) add_button("Extract the file by using BPCS");
-		Exit= (JButton) add_button("EXIT");
+		Hiding_LSB= new JButton("Hiding the file by using LSB");
+		Hiding_LSB.addActionListener(this);
+		panal.add(Hiding_LSB);
+		
+		Hiding_BPCS= new JButton("Hiding the file by using BPCS");
+		Hiding_BPCS.addActionListener(this);
+		panal.add(Hiding_BPCS);
+		
+		Extract_LSB = new JButton("Extract the file by using LSB");
+		Extract_LSB.addActionListener(this);
+		panal.add(Extract_LSB);
+		
+		Extract_BPCS= new JButton("Extract the file by using BPCS");
+		Extract_BPCS.addActionListener(this);
+		panal.add(Extract_BPCS);
+		
+		Exit= new JButton("EXIT");
+		Exit.addActionListener(this);
+		panal.add(Exit);
 		
 		setVisible(true);	
 		
 	}
 
-private Object add_button(String choice) {
-		JButton	button = new JButton(choice);
-		button.addActionListener(this);
-		panal.add(button);
-		return button;
-	}
  public void actionPerformed(ActionEvent event)
 	{
 	JButton	button = (JButton)event.getSource();
