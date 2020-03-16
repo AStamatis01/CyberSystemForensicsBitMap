@@ -69,30 +69,30 @@ public class Start  extends JFrame implements ActionListener {
 	if (button == Hiding_LSB)
 		
 	{
-		String	image_name = JOptionPane.showInputDialog(null, "Enter The Name of the image withe extintion(bmp)");
-	    String	file_name  = JOptionPane.showInputDialog(null, "Enter The Name of the file withe extintion");
+		String	image_name = JOptionPane.showInputDialog(null, "Enter The Name of the image with extension (eg. imageName.bmp)");
+	    String	file_name  = JOptionPane.showInputDialog(null, "Enter The Name of the file you want to hide. with extension (eg. file.txt)");
 	    LSB_encrypt.read_image_file(image_name, file_name);
 	    
 	}
 	
 	else if (button == Hiding_BPCS)
 	{
-		String	image_name = JOptionPane.showInputDialog(null, "Enter The Name of the image withe extintion(bmp)");
-	    String	file_name  = JOptionPane.showInputDialog(null, "Enter The Name of the secret file withe extintion");
+		String	image_name = JOptionPane.showInputDialog(null, "Enter The Name of the image with extension (eg. imageName.bmp)");
+	    String	file_name  = JOptionPane.showInputDialog(null, "Enter The Name of the file you want to hide. with extension (eg. file.txt)");
 	    BPCS_encrypt.read_image_file(image_name, file_name);
 	}
 	
 	else if (button == Extract_LSB)
 	{
-		String	image_name = JOptionPane.showInputDialog(null, "Enter The Name of the embedded image withe extintion(bmp)");
-	    String	form  = JOptionPane.showInputDialog(null, "Enter the extintion of the file");
+		String	image_name = JOptionPane.showInputDialog(null, "Enter The Name of the vessel image with extension (eg. savedLSB.bmp)");
+	    String	form  = JOptionPane.showInputDialog(null, "Enter the extension of the file hidden file (eg. txt)");
 	    LSB_decrypt.read_image_file(image_name, form);
 	}
 	
 	else if (button == Extract_BPCS)
 	{
-		String	image_name = JOptionPane.showInputDialog(null, "Enter The Name of the embedded image withe extintion(bmp)");
-	    String	form  = JOptionPane.showInputDialog(null, "Enter the extintion of the secret file");
+		String	image_name = JOptionPane.showInputDialog(null, "Enter The Name of the vessel image with extension (eg. savedBPCS.bmp)");
+	    String	form  = JOptionPane.showInputDialog(null, "Enter the extension of the file hidden file (eg. txt)");
 	    BPCS_decrypt.read_image_file(image_name, form);
 	}
 	

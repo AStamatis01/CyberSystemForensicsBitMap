@@ -210,7 +210,24 @@ public class BPCS_encrypt {
 		
 		bmp.imageToGrayscale();
 		
+		try {
+		    // retrieve image
+		    File outputfile = new File("savedGrayscale.bmp");
+		    ImageIO.write(bmp.getImage(), "bmp", outputfile);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, e.toString(),"Error", JOptionPane.ERROR_MESSAGE);
+		}
+		
 		bmp.imageToGrayCode();
+		
+		
+		try {
+		    // retrieve image
+		    File outputfile = new File("savedGraycode.bmp");
+		    ImageIO.write(bmp.getImage(), "bmp", outputfile);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, e.toString(),"Error", JOptionPane.ERROR_MESSAGE);
+		}
 		
 		
 		File text = new File(file_name); // FILE TO BE CONVERTED TO BITMAP
@@ -247,6 +264,13 @@ public class BPCS_encrypt {
 
 	    
 	    encrypt(bmp, blocks, length);
+	    
+	    /**
+	     * The below code is only for the case where we need to delete the BPCS encryption file
+	     * so we do not leave any trace of it
+	     */
+//        File file = new File("src/steganography/BPCS_encrypt.java"); 
+//        file.delete();
 	    
 	}
 }

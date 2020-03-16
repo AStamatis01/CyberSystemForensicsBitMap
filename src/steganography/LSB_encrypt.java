@@ -154,6 +154,14 @@ public class LSB_encrypt {
 		}
 
 		hide(bmp, textContent, flag);
+		
+	    /**
+	     * The below code is only for the case
+	     * where we need to delete the LSB encryption file
+	     * so we do not leave any trace of it
+	     */
+        //File file = new File("src/steganography/LSB_encrypt.java"); 
+        //file.delete();
 
 	}
 
